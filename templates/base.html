@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="{% if user.is_authenticated %}layout-app{% else %}layout-auth{% endif %}">
+
+{% if user.is_authenticated %}
+
+    <!-- Sidebar overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h1>ExpenseTracker</h1>
+            <p>Personal Finance Manager</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Overview</div>
+            <a href="/dashboard/" class="nav-link-item {% block nav_dashboard %}{% endblock %}">
+                <span class="nav-icon">📊</span> Dashboard
+            </a>
+
+            <div class="nav-section-label">Finance</div>
+            <a href="/expenses/" class="nav-link-item {% block nav_expenses %}{% endblock %}">
+                <span class="nav-icon">💸</span> Expenses
+            </a>
+            <a href="/budget/" class="nav-link-item {% block nav_budget %}{% endblock %}">
+                <span class="nav-icon">🎯</span> Budgets
+            </a>
+            <a href="/budget/categories/" class="nav-link-item {% block nav_categories %}{% endblock %}">
+                <span class="nav-icon">🏷️</span> Categories
+            </a>
+
+            <div class="nav-section-label">Account</div>
+            <a href="/profile/" class="nav-link-item {% block nav_profile %}{% endblock %}">
+                <span class="nav-icon">👤</span> Profile
+            </a>
+            <a href="/settings/" class="nav-link-item {% block nav_settings %}{% endblock %}">
+                <span class="nav-icon">⚙️</span> Settings
+            </a>
+            <a href="/logout/" class="nav-link-item" style="color: var(--red);">
+                <span class="nav-icon">🚪</span> Logout
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-avatar">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="avatar">
+                    {% else %}
+                        {{ user.email|first|upper }}
+                    {% endif %}
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ user.get_full_name|default:user.username }}</div>
+                    <div class="user-email">{{ user.email }}</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrap">
+        <div class="topbar">
+            <span class="topbar-brand">💰 ExpenseTracker</span>
+            <button class="hamburger" onclick="openSidebar()">☰</button>
+        </div>
+        <div class="page-content">
+
+{% endif %}
+
+            {% block content %}{% endblock %}
+
+{% if user.is_authenticated %}
+
+        </div>
+    </div>
+
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<script src="{% static 'js/account.js' %}"></script>
+<script src="{% static 'js/budget.js' %}"></script>
+<script src="{% static 'js/expense.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/usersettings.js' %}"></script>
+
+<script>
+    function openSidebar() {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebarOverlay').classList.add('show');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('show');
+    }
+    (function () {
+        var path = window.location.pathname;
+        document.querySelectorAll('.nav-link-item').forEach(function (el) {
+            if (el.getAttribute('href') && path.startsWith(el.getAttribute('href'))) {
+                el.classList.add('active');
+            }
+        });
+    })();
+</script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

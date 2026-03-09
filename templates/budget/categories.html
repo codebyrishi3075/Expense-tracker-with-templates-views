@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block nav_categories %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Categories</h2>
+    <p>Manage your budget categories</p>
+</div>
+
+<div id="messageDiv"></div>
+
+<div style="max-width:560px;">
+    <div class="card" style="margin-bottom:20px;">
+        <div class="section-title">Add Category</div>
+        <form id="categoryForm">
+            {% csrf_token %}
+            <div class="input-row">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Category name (e.g. Food, Travel)" required>
+                </div>
+                <button type="submit" class="btn-primary">Add</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="section-title">Your Categories</div>
+        <div id="categoryList">
+            <p class="empty-msg">Loading...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

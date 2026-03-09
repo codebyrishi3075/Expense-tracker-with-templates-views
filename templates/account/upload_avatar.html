@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block nav_profile %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Upload Avatar</h2>
+    <p>Change your profile picture</p>
+</div>
+
+<div id="messageDiv"></div>
+
+<div style="max-width:480px;">
+    <div class="card">
+        <!-- FIXED: id changed from uploadAvatarForm to avatarUploadForm to match app.js -->
+        <form id="avatarUploadForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Profile Image</label>
+                <input type="file" name="profile_image" accept="image/*" required>
+            </div>
+            <p style="font-size:0.75rem; color:var(--muted); margin-bottom:16px;">
+                Allowed: JPG, PNG, GIF, WEBP — Max: 5MB
+            </p>
+            <button type="submit" class="btn-primary">Upload Avatar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

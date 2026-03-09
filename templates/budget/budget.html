@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block nav_budget %}active{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Budgets</h2>
+    <p>Set monthly spending limits per category</p>
+</div>
+
+<div id="messageDiv"></div>
+
+<div class="grid-2" style="margin-bottom:20px;">
+
+    <!-- ── CREATE BUDGET ── -->
+    <div class="card" id="addPanel">
+        <div class="section-title">Create Budget</div>
+        <form id="budgetForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" id="categorySelect" required>
+                    <option value="">Select a category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" name="amount" placeholder="0.00" step="0.01" min="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Month</label>
+                <input type="month" name="month" required>
+            </div>
+            <button type="submit" class="btn-primary">Create Budget</button>
+        </form>
+    </div>
+
+    <!-- ── EDIT BUDGET (hidden) ── -->
+    <div class="card" id="editBudgetPanel" style="display:none; border:1px solid var(--yellow);">
+        <div class="section-title" style="color:var(--yellow);">✏️ Edit Budget</div>
+        <form id="editBudgetForm">
+            {% csrf_token %}
+            <input type="hidden" id="editBudgetId">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" id="editBudgetCategory">
+                    <option value="">Select a category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="editBudgetAmount" name="amount" placeholder="0.00" step="0.01" min="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Month</label>
+                <input type="month" id="editBudgetMonth" name="month" required>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button type="submit" class="btn-primary">Save Changes</button>
+                <button type="button" class="btn-outline" id="cancelBudgetEditBtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ── UTILIZATION ── -->
+    <div class="card">
+        <div class="section-title">Current Month Utilization</div>
+        <button id="loadUtilization" class="btn-outline" style="margin-bottom:14px;">Load Utilization</button>
+        <div id="utilizationDiv"></div>
+    </div>
+
+</div>
+
+<!-- ── BUDGET LIST ── -->
+<div class="card">
+    <div class="section-title">All Budgets</div>
+    <div id="budgetList"><p class="empty-msg">Loading...</p></div>
+</div>
+{% endblock %}
